@@ -31,7 +31,7 @@ describe('app.js', () => {
         .then((response) => {
           console.log(response.body);
           expect(typeof response.body).toBe('object');
-          expect(response.body.categories.length).toBeGreaterThan(0);
+          expect(response.body.categories.length).toBe(4);
           expect(
             response.body.categories.forEach((catagory) => {
               expect(catagory).toEqual(
