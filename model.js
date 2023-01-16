@@ -11,3 +11,15 @@ exports.returnReviews = () => {
     return reviews.rows;
   });
 };
+
+exports.returnReviewComments = (reviewId) => {
+  const review = [+reviewId];
+  return db
+    .query(
+      `SELECT * FROM comments WHERE review_id = $1 ORDER BY created_at ASC;`,
+      review
+    )
+    .then((comments) => {
+      return comments.rows;
+    });
+};

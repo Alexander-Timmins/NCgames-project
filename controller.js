@@ -1,4 +1,8 @@
-const { returnCategories, returnReviews } = require('./model');
+const {
+  returnCategories,
+  returnReviews,
+  returnReviewComments,
+} = require('./model');
 
 exports.standardResponse = (req, res) => {
   res.status(200).send('Api ready to serve');
@@ -16,6 +20,15 @@ exports.getReviews = (req, res, next) => {
   returnReviews()
     .then((reviews) => {
       res.status(200).send({ reviews: reviews });
+    })
+    .catch(next);
+};
+
+exports.getReviewComments = (req, res, next) => {
+  const reviewId = req.params.review_Id;
+  returnReviewComments(reviewId)
+    .then((comments) => {
+      res.status(200).send({ comments: comments });
     })
     .catch(next);
 };
