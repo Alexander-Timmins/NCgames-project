@@ -5,3 +5,9 @@ exports.returnCategories = () => {
     return categories.rows;
   });
 };
+
+exports.returnReviews = () => {
+  return db.query(`SELECT * FROM reviews`).then((reviews) => {
+    return reviews.rows;
+  });
+};
