@@ -1,6 +1,7 @@
 const {
   returnCategories,
   returnReviews,
+  returnReviewComments,
   returnSpecificReview,
 } = require('./model');
 
@@ -29,6 +30,15 @@ exports.getReviews = (req, res, next) => {
   returnReviews()
     .then((reviews) => {
       res.status(200).send({ reviews: reviews });
+    })
+    .catch(next);
+};
+
+exports.getReviewComments = (req, res, next) => {
+  const reviewId = req.params.review_Id;
+  returnReviewComments(reviewId)
+    .then((comments) => {
+      res.status(200).send({ comments: comments });
     })
     .catch(next);
 };

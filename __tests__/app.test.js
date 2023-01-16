@@ -105,7 +105,6 @@ describe('app.js', () => {
         .get('/api/reviews')
         .expect(200)
         .then((response) => {
-          console.log(response.body);
           expect(typeof response.body).toBe('object');
           expect(response.body.reviews.length).toBe(13);
           expect(
@@ -120,6 +119,31 @@ describe('app.js', () => {
                   review_img_url: expect.any(String),
                   created_at: expect.any(String),
                   designer: expect.any(String),
+                })
+              );
+            })
+          );
+        });
+    });
+  });
+  describe('/api/:review_Id/comments', () => {
+    test('returns a list of comments for a specific given review', () => {
+      return request(app)
+        .get('/api/3/comments')
+        .expect(200)
+        .then((response) => {
+          expect(typeof response.body).toBe('object');
+          expect(response.body.comments.length).toBe(3);
+          expect(
+            response.body.comments.forEach((comment) => {
+              expect(comment).toEqual(
+                expect.objectContaining({
+                  comment_id: expect.any(Number),
+                  body: expect.any(String),
+                  review_id: expect.any(Number),
+                  votes: expect.any(Number),
+                  author: expect.any(String),
+                  created_at: expect.any(String),
                 })
               );
             })
