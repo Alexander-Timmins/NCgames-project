@@ -30,12 +30,20 @@ exports.returnReviews = () => {
 
 exports.returnReviewComments = (reviewId) => {
   const review = [+reviewId];
-  return db
-    .query(
-      `SELECT * FROM comments WHERE review_id = $1 ORDER BY created_at ASC;`,
-      review
-    )
-    .then((comments) => {
-      return comments.rows;
-    });
+  if (typeof review[0] === 'number') {
+    return db
+      .query(
+        `SELECT * FROM comments WHERE review_id = $1 ORDER BY created_at ASC;`,
+        review
+      )
+      .then((comment) => {
+        if (comment.rows[0] === undefined) {
+          let err = 'Not found';
+          return Promise.reject({ status: 404, msg: err });
+        }
+        return comment.rows;
+      });
+  } else {
+    return Promise.reject({ status: 400, msg: err });
+  }
 };
