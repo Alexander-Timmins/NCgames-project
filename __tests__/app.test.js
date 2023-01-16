@@ -44,7 +44,7 @@ describe('app.js', () => {
         });
     });
   });
-  
+
   describe('/api/review/:review_Id', () => {
     test('should return a 404 error if the review is not found', () => {
       return request(app)
@@ -75,7 +75,6 @@ describe('app.js', () => {
         created_at: '2021-01-18T10:01:41.251Z',
         votes: 5,
       };
-
       return request(app)
         .get('/api/review/3')
         .expect(200)
@@ -94,6 +93,11 @@ describe('app.js', () => {
               category: expect.any(String),
               owner: expect.any(String),
               created_at: expect.any(String),
+            })
+          );
+        });
+    });
+  });
 
   describe('/api/reviews', () => {
     test('returns a list of reviews in an object key with array values', () => {
@@ -103,7 +107,7 @@ describe('app.js', () => {
         .then((response) => {
           console.log(response.body);
           expect(typeof response.body).toBe('object');
-          expect(response.body.reviews.length).toBe(4);
+          expect(response.body.reviews.length).toBe(13);
           expect(
             response.body.reviews.forEach((review) => {
               expect(review).toEqual(

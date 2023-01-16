@@ -6,7 +6,6 @@ exports.returnCategories = () => {
   });
 };
 
-
 exports.returnSpecificReview = (review_Id) => {
   const reviewId = [+review_Id];
   if (typeof reviewId[0] === 'number') {
@@ -20,12 +19,11 @@ exports.returnSpecificReview = (review_Id) => {
         return review.rows;
       });
   } else {
-  return Promise.reject({ status: 400, msg: err });
+    return Promise.reject({ status: 400, msg: err });
   }
-
+};
 exports.returnReviews = () => {
   return db.query(`SELECT * FROM reviews`).then((reviews) => {
     return reviews.rows;
   });
-
 };
