@@ -53,7 +53,7 @@ describe('app.js', () => {
         .then((response) => {
           console.log(response.body);
           expect(typeof response.body).toBe('object');
-          expect(response.body.reviews.length).toBeGreaterThan(0);
+          expect(response.body.reviews.length).toBe(4);
           expect(
             response.body.reviews.forEach((review) => {
               expect(review).toEqual(
@@ -62,6 +62,10 @@ describe('app.js', () => {
                   title: expect.any(String),
                   category: expect.any(String),
                   votes: expect.any(Number),
+                  owner: expect.any(String),
+                  review_img_url: expect.any(String),
+                  created_at: expect.any(String),
+                  designer: expect.any(String),
                 })
               );
             })
