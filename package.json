@@ -11,23 +11,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/northcoders/be-nc-games.git"
+    "url": "git+https://github.com/Alexander-Timmins/NCgames-project.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/northcoders/be-nc-games/issues"
+    "url": "git+https://github.com/Alexander-Timmins/NCgames-project.git"
   },
-  "homepage": "https://github.com/northcoders/be-nc-games#readme",
+  "homepage": "https://github.com/Alexander-Timmins/NCgames-project#readme",
   "dependencies": {
-    "dotenv": "^16.0.0",
-    "pg": "^8.7.3",
+    "dotenv": "^16.0.0"
   },
   "devDependencies": {
     "husky": "^8.0.2",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
+    "pg": "^8.8.0",
     "pg-format": "^1.0.4"
   },
   "jest": {
