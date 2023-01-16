@@ -1,10 +1,15 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
-const { getCategories, standardResponse } = require('./controller');
+const {
+  getCategories,
+  standardResponse,
+  getSpecificReview,
+} = require('./controller');
 
-app.get('/api', standardResponse)
+app.get('/api', standardResponse);
 app.get('/api/categories', getCategories);
+app.get('/api/review/:review_Id', getSpecificReview);
 
 app.use((err, request, response, next) => {
   if (err.status) {
