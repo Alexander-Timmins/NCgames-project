@@ -13,7 +13,7 @@ app.get('/api/review/:review_Id', getSpecificReview);
 
 app.use((err, request, response, next) => {
   if (err.status) {
-    response.status(err.status).send({ message: err.message });
+    response.status(err.status).send({ message: err.msg });
   } else {
     next(err);
   }

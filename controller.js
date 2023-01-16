@@ -16,7 +16,7 @@ exports.getSpecificReview = (req, res, next) => {
   let reviewId = [req.params.review_Id];
   returnSpecificReview(reviewId)
     .then((review) => {
-      res.status(200).send({ requestedReview: review });
+      res.status(200).send(review[0]);
     })
     .catch(next);
 };
