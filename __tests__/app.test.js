@@ -45,4 +45,32 @@ describe('app.js', () => {
         });
     });
   });
+  describe('/api/reviews', () => {
+    test('returns a list of reviews in an object key with array values', () => {
+      return request(app)
+        .get('/api/reviews')
+        .expect(200)
+        .then((response) => {
+          console.log(response.body);
+          expect(typeof response.body).toBe('object');
+          expect(response.body.reviews.length).toBe(4);
+          expect(
+            response.body.reviews.forEach((review) => {
+              expect(review).toEqual(
+                expect.objectContaining({
+                  review_id: expect.any(Number),
+                  title: expect.any(String),
+                  category: expect.any(String),
+                  votes: expect.any(Number),
+                  owner: expect.any(String),
+                  review_img_url: expect.any(String),
+                  created_at: expect.any(String),
+                  designer: expect.any(String),
+                })
+              );
+            })
+          );
+        });
+    });
+  });
 });
