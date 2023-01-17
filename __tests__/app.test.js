@@ -185,7 +185,7 @@ describe('app.js', () => {
     });
   });
   describe('7. POST /api/reviews/:review_id/comments', () => {
-    const newComment = {
+    let newComment = {
       username: 'bainesface',
       body: 'This is a comment',
     };
@@ -215,13 +215,25 @@ describe('app.js', () => {
         .send(newComment)
         .expect(404)
         .then((response) => {
-          console.log(response.body);
           expect(response.body.message).toBe('Not found');
         });
     });
     test('returns a 400 if given an invalid request', () => {
       return request(app)
         .post('/api/review/banana/comments')
+        .send(newComment)
+        .expect(400)
+        .then((response) => {
+          expect(response.body.message).toBe('Invalid request made');
+        });
+    });
+    test.only('returns a 400 if body or username missing from post request', () => {
+      newComment = {
+        random: 'bainesface',
+        body: 'This is a comment',
+      };
+      return request(app)
+        .post('/api/review/3/comments')
         .send(newComment)
         .expect(400)
         .then((response) => {

@@ -49,11 +49,13 @@ exports.returnReviewComments = (reviewId) => {
   }
 };
 
-exports.postNewComment = (params, reviewId) => {
-  if (typeof +reviewId === 'number') {
-    return db.query(`SELECT * FROM reviews;`).then((response) => {
-      let reviewIds = response.rows.map((x) => x.review_id);
-      if (reviewId > Math.max(...reviewIds)) {
+exports.insertReviewComment = (params, reviewId) => {
+  console.log(params, reviewId);
+  return db
+    .query(`SELECT * FROM reviews WHERE review_id = $1;`, [reviewId])
+    .then((response) => {
+      console.log(response.rows);
+      if (response.rows[0] === undefined) {
         return Promise.reject({ status: 404, msg: 'Not found' });
       } else {
         return db
@@ -62,11 +64,8 @@ exports.postNewComment = (params, reviewId) => {
             [params.body, params.username, reviewId]
           )
           .then((comment) => {
-            return comment.rows;
+            return comment.rows[0];
           });
       }
     });
-  } else {
-    return Promise.reject({ status: 400, msg: err });
-  }
 };

@@ -3,7 +3,7 @@ const {
   returnReviews,
   returnReviewComments,
   returnSpecificReview,
-  postNewComment,
+  insertReviewComment,
 } = require('./model');
 
 exports.standardResponse = (req, res) => {
@@ -46,9 +46,9 @@ exports.getReviewComments = (req, res, next) => {
 
 exports.postReviewComment = (req, res, next) => {
   const reviewId = req.params.review_Id;
-  postNewComment(req.body, reviewId)
+  insertReviewComment(req.body, reviewId)
     .then((comments) => {
-      res.status(201).send({ comment: comments[0] });
+      res.status(201).send({ comment: comments });
     })
     .catch(next);
 };

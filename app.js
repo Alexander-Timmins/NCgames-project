@@ -19,16 +19,16 @@ app.get('/api/review/:review_Id', getSpecificReview);
 app.post('/api/review/:review_Id/comments', postReviewComment);
 
 app.use((err, request, response, next) => {
-  if (err.status) {
-    response.status(err.status).send({ message: err.msg });
+  if (err.code === '22P02' || err.code === '23502') {
+    response.status(400).send({ message: 'Invalid request made' });
   } else {
     next(err);
   }
 });
 
 app.use((err, request, response, next) => {
-  if (err.code === '22P02') {
-    response.status(400).send({ message: 'Invalid request made' });
+  if (err.status) {
+    response.status(err.status).send({ message: err.msg });
   } else {
     next(err);
   }
