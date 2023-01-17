@@ -50,11 +50,9 @@ exports.returnReviewComments = (reviewId) => {
 };
 
 exports.insertReviewComment = (params, reviewId) => {
-  console.log(params, reviewId);
   return db
     .query(`SELECT * FROM reviews WHERE review_id = $1;`, [reviewId])
     .then((response) => {
-      console.log(response.rows);
       if (response.rows[0] === undefined) {
         return Promise.reject({ status: 404, msg: 'Not found' });
       } else {

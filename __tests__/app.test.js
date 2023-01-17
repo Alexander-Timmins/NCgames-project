@@ -54,12 +54,13 @@ describe('app.js', () => {
     });
   });
 
-  describe('4. GET /api/reviews', () => {
+  describe.only('4. GET /api/reviews', () => {
     test('returns object with key of reviews', () => {
       return request(app)
         .get('/api/reviews')
         .expect(200)
         .then((response) => {
+          console.log(response.body);
           expect(typeof response.body).toBe('object');
           expect(response.body.hasOwnProperty('reviews')).toBe(true);
         });
@@ -81,6 +82,7 @@ describe('app.js', () => {
                   review_img_url: expect.any(String),
                   created_at: expect.any(String),
                   designer: expect.any(String),
+                  comment_count: expect.any(Number),
                 })
               );
             })
