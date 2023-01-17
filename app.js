@@ -9,6 +9,7 @@ const {
   getReviews,
   getReviewComments,
   updateReviewVotes,
+  postReviewComment,
 } = require('./controller');
 
 app.get('/api', standardResponse);
@@ -17,9 +18,12 @@ app.get('/api/reviews', getReviews);
 app.get('/api/:review_Id/comments', getReviewComments);
 app.get('/api/review/:review_Id', getSpecificReview);
 app.patch('/api/review/:review_Id', updateReviewVotes);
+app.post('/api/review/:review_Id/comments', postReviewComment);
+
 
 app.use((err, request, response, next) => {
-  console.log(err);
+  if (err.code === '22P02' || err.code === '23502') {
+    response.status(400).send({ message: 'Invalid request made' });
   if (err.status) {
     response.status(err.status).send({ message: err.msg });
   } else {
@@ -28,12 +32,9 @@ app.use((err, request, response, next) => {
 });
 
 app.use((err, request, response, next) => {
-  if (err.code === '22P02' || err.code === '23502') {
-    response.status(400).send({ message: 'Invalid request made' });
-  } else {
-    next(err);
-  }
-});
+  console.log(err);
+  if (err.status) {
+    response.status(err.status).send({ message: err.msg });
 
 app.use((err, request, response, next) => {
   response

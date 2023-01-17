@@ -23,9 +23,17 @@ exports.returnSpecificReview = (review_Id) => {
   }
 };
 exports.returnReviews = () => {
-  return db.query(`SELECT * FROM reviews`).then((reviews) => {
-    return reviews.rows;
-  });
+  return db
+    .query(
+      `SELECT reviews.*, COUNT(comment_id)::INT AS comment_count
+    FROM reviews
+    LEFT JOIN comments ON comments.review_id = reviews.review_id
+    GROUP BY reviews.review_id;`
+    )
+    .then((reviews) => {
+      console.log(reviews);
+      return reviews.rows;
+    });
 };
 
 exports.returnReviewComments = (reviewId) => {
@@ -61,5 +69,23 @@ exports.returnUpdatedReview = (reviewId, vote) => {
         return Promise.reject({ status: 404, msg: err });
       }
       return response.rows;
+    });
+      }
+      
+exports.insertReviewComment = (params, reviewId) => {
+  return db
+    .query(`SELECT * FROM reviews WHERE review_id = $1;`, [reviewId])
+    .then((response) => {
+      if (response.rows[0] === undefined) {
+        return Promise.reject({ status: 404, msg: 'Not found' });
+      } else {
+        return db
+          .query(
+            `INSERT INTO comments (body, author, review_id) VALUES ($1, $2, $3) RETURNING *;`,
+            [params.body, params.username, reviewId]
+          )
+          .then((comment) => {
+            return comment.rows[0];
+      
     });
 };

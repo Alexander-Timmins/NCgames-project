@@ -4,6 +4,7 @@ const {
   returnReviewComments,
   returnSpecificReview,
   returnUpdatedReview,
+  insertReviewComment,
 } = require('./model');
 
 exports.standardResponse = (req, res) => {
@@ -53,3 +54,13 @@ exports.updateReviewVotes = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.postReviewComment = (req, res, next) => {
+  const reviewId = req.params.review_Id;
+  insertReviewComment(req.body, reviewId)
+    .then((comments) => {
+      res.status(201).send({ comment: comments });
+    })
+    .catch(next);
+};
+
