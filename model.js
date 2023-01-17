@@ -48,3 +48,21 @@ exports.returnReviewComments = (reviewId) => {
     return Promise.reject({ status: 400, msg: err });
   }
 };
+
+exports.returnUpdatedReview = (reviewId, vote) => {
+  const review = +reviewId[0];
+  let err = '';
+  if (typeof review === 'number') {
+    return db
+      .query(
+        `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *;`,
+        [vote, review]
+      )
+      .then((response) => {
+        console.log(response.rows);
+        return response.rows;
+      });
+  } else {
+    return Promise.reject({ status: 400, msg: err });
+  }
+};

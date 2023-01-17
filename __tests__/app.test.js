@@ -184,4 +184,18 @@ describe('app.js', () => {
         });
     });
   });
+  describe('8. PATCH /api/reviews/:review_id', () => {
+    test('returns the updated review', () => {
+      const votesToUpdate = {
+        inc_votes: 100,
+      };
+      return request(app)
+        .patch('/api/review/3')
+        .send(votesToUpdate)
+        .expect(202)
+        .then((response) => {
+          expect(response.body).toEqual({});
+        });
+    });
+  });
 });

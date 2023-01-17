@@ -8,6 +8,7 @@ const {
   getSpecificReview,
   getReviews,
   getReviewComments,
+  updateReviewVotes,
 } = require('./controller');
 
 app.get('/api', standardResponse);
@@ -15,6 +16,7 @@ app.get('/api/categories', getCategories);
 app.get('/api/reviews', getReviews);
 app.get('/api/:review_Id/comments', getReviewComments);
 app.get('/api/review/:review_Id', getSpecificReview);
+app.patch('/api/review/:review_Id', updateReviewVotes)
 
 app.use((err, request, response, next) => {
   if (err.status) {
