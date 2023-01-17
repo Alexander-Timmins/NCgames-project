@@ -187,15 +187,57 @@ describe('app.js', () => {
   describe('8. PATCH /api/reviews/:review_id', () => {
     test('returns the updated review', () => {
       const votesToUpdate = {
-        inc_votes: 100,
+        inc_votes: 1000,
       };
       return request(app)
         .patch('/api/review/3')
         .send(votesToUpdate)
         .expect(202)
         .then((response) => {
-          expect(response.body).toEqual({});
+          expect(response.body).toEqual({
+            updatedReview: [
+              {
+                category: 'social deduction',
+                created_at: '2021-01-18T10:01:41.251Z',
+                designer: 'Akihisa Okui',
+                owner: 'bainesface',
+                review_body: "We couldn't find the werewolf!",
+                review_id: 3,
+                review_img_url:
+                  'https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?w=700&h=700',
+                title: 'Ultimate Werewolf',
+                votes: 1005,
+              },
+            ],
+          });
         });
+    });
+    test('returns a status 400 when passed an invalid query', () => {
+      const votesToUpdate = {
+        inc_votes: 1000,
+      };
+      return request(app)
+        .patch('/api/review/banana')
+        .send(votesToUpdate)
+        .expect(400);
+    });
+    test('returns a status 404 when passed a review ID that does not exist', () => {
+      const votesToUpdate = {
+        inc_votes: 1000,
+      };
+      return request(app)
+        .patch('/api/review/999')
+        .send(votesToUpdate)
+        .expect(404);
+    });
+    test('returns a status 400 when passed an invalid body', () => {
+      const votesToUpdate = {
+        random: 1000,
+      };
+      return request(app)
+        .patch('/api/review/3')
+        .send(votesToUpdate)
+        .expect(400);
     });
   });
 });

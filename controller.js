@@ -47,7 +47,9 @@ exports.getReviewComments = (req, res, next) => {
 exports.updateReviewVotes = (req, res, next) => {
   const reviewId = req.params.review_Id;
   const vote = req.body.inc_votes;
-  returnUpdatedReview(reviewId, vote).then((review) => {
-    res.status(202).send({ updatedReview: review });
-  });
+  returnUpdatedReview(reviewId, vote)
+    .then((review) => {
+      res.status(202).send({ updatedReview: review });
+    })
+    .catch(next);
 };
