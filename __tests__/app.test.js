@@ -229,7 +229,7 @@ describe('app.js', () => {
           expect(response.body.message).toBe('Invalid request made');
         });
     });
-    test.only('returns a 400 if body or username missing from post request', () => {
+    test('returns a 400 if body or username missing from post request', () => {
       newComment = {
         random: 'bainesface',
         body: 'This is a comment',

@@ -23,9 +23,17 @@ exports.returnSpecificReview = (review_Id) => {
   }
 };
 exports.returnReviews = () => {
-  return db.query(`SELECT * FROM reviews`).then((reviews) => {
-    return reviews.rows;
-  });
+  return db
+    .query(
+      `SELECT reviews.*, COUNT(comment_id)::INT AS comment_count
+    FROM reviews
+    LEFT JOIN comments ON comments.review_id = reviews.review_id
+    GROUP BY reviews.review_id;`
+    )
+    .then((reviews) => {
+      console.log(reviews);
+      return reviews.rows;
+    });
 };
 
 exports.returnReviewComments = (reviewId) => {
