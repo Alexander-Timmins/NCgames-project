@@ -48,3 +48,24 @@ exports.returnReviewComments = (reviewId) => {
     return Promise.reject({ status: 400, msg: err });
   }
 };
+
+exports.insertReviewComment = (params, reviewId) => {
+  console.log(params, reviewId);
+  return db
+    .query(`SELECT * FROM reviews WHERE review_id = $1;`, [reviewId])
+    .then((response) => {
+      console.log(response.rows);
+      if (response.rows[0] === undefined) {
+        return Promise.reject({ status: 404, msg: 'Not found' });
+      } else {
+        return db
+          .query(
+            `INSERT INTO comments (body, author, review_id) VALUES ($1, $2, $3) RETURNING *;`,
+            [params.body, params.username, reviewId]
+          )
+          .then((comment) => {
+            return comment.rows[0];
+          });
+      }
+    });
+};
