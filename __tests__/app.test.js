@@ -54,7 +54,7 @@ describe('app.js', () => {
     });
   });
 
-  describe.only('4. GET /api/reviews', () => {
+  describe('4. GET /api/reviews', () => {
     test('returns object with key of reviews', () => {
       return request(app)
         .get('/api/reviews')
@@ -242,8 +242,10 @@ describe('app.js', () => {
         .then((response) => {
           expect(response.body.message).toBe('Invalid request made');
         });
+    });
+  });
 
-describe('8. PATCH /api/reviews/:review_id', () => {
+  describe('8. PATCH /api/reviews/:review_id', () => {
     test('returns the updated review', () => {
       const votesToUpdate = {
         inc_votes: 1000,

@@ -63,15 +63,14 @@ exports.returnUpdatedReview = (reviewId, vote) => {
       [vote, +reviewId]
     )
     .then((response) => {
-      console.log(response.rows);
       if (response.rows[0] === undefined) {
         let err = 'Not found';
         return Promise.reject({ status: 404, msg: err });
       }
       return response.rows;
     });
-      }
-      
+};
+
 exports.insertReviewComment = (params, reviewId) => {
   return db
     .query(`SELECT * FROM reviews WHERE review_id = $1;`, [reviewId])
@@ -86,6 +85,7 @@ exports.insertReviewComment = (params, reviewId) => {
           )
           .then((comment) => {
             return comment.rows[0];
-      
+          });
+      }
     });
 };
