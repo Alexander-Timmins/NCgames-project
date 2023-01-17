@@ -7,8 +7,7 @@ const {
   standardResponse,
   getSpecificReview,
   getReviews,
-  getReviewComments
-
+  getReviewComments,
 } = require('./controller');
 
 app.get('/api', standardResponse);
@@ -16,7 +15,6 @@ app.get('/api/categories', getCategories);
 app.get('/api/reviews', getReviews);
 app.get('/api/:review_Id/comments', getReviewComments);
 app.get('/api/review/:review_Id', getSpecificReview);
-
 
 app.use((err, request, response, next) => {
   if (err.status) {
@@ -28,7 +26,7 @@ app.use((err, request, response, next) => {
 
 app.use((err, request, response, next) => {
   if (err.code === '22P02') {
-    response.status(400).send({ message: 'Bad request' });
+    response.status(400).send({ message: 'Invalid request made' });
   } else {
     next(err);
   }

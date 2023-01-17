@@ -23,13 +23,22 @@ describe('app.js', () => {
     });
   });
 
-  describe('/api/categories', () => {
-    test('returns a list of categories in an object key with array values', () => {
+  describe('3. GET /api/categories', () => {
+    test('returns an object with key of categories and value of object', () => {
       return request(app)
         .get('/api/categories')
         .expect(200)
         .then((response) => {
           expect(typeof response.body).toBe('object');
+          expect(response.body.hasOwnProperty('categories')).toBe(true);
+          expect(typeof response.body.categories).toBe('object');
+        });
+    });
+    test('returns an object with values equal to all categories in the database', () => {
+      return request(app)
+        .get('/api/categories')
+        .expect(200)
+        .then((response) => {
           expect(response.body.categories.length).toBe(4);
           expect(
             response.body.categories.forEach((catagory) => {
@@ -45,7 +54,42 @@ describe('app.js', () => {
     });
   });
 
-  describe('/api/review/:review_Id', () => {
+  describe('4. GET /api/reviews', () => {
+    test('returns object with key of reviews', () => {
+      return request(app)
+        .get('/api/reviews')
+        .expect(200)
+        .then((response) => {
+          expect(typeof response.body).toBe('object');
+          expect(response.body.hasOwnProperty('reviews')).toBe(true);
+        });
+    });
+    test('returns a list of reviews in an object key with array values', () => {
+      return request(app)
+        .get('/api/reviews')
+        .expect(200)
+        .then((response) => {
+          expect(
+            response.body.reviews.forEach((review) => {
+              expect(review).toEqual(
+                expect.objectContaining({
+                  review_id: expect.any(Number),
+                  title: expect.any(String),
+                  category: expect.any(String),
+                  votes: expect.any(Number),
+                  owner: expect.any(String),
+                  review_img_url: expect.any(String),
+                  created_at: expect.any(String),
+                  designer: expect.any(String),
+                })
+              );
+            })
+          );
+        });
+    });
+  });
+
+  describe('5. GET /api/reviews/:review_id', () => {
     test('should return a 404 error if the review is not found', () => {
       return request(app)
         .get('/api/review/999')
@@ -59,7 +103,7 @@ describe('app.js', () => {
         .get('/api/review/banana')
         .expect(400)
         .then((response) => {
-          expect(response.body.message).toBe('Bad request');
+          expect(response.body.message).toBe('Invalid request made');
         });
     });
     test('returns a specific review by review_Id reference', () => {
@@ -99,40 +143,13 @@ describe('app.js', () => {
     });
   });
 
-  describe('/api/reviews', () => {
-    test('returns a list of reviews in an object key with array values', () => {
-      return request(app)
-        .get('/api/reviews')
-        .expect(200)
-        .then((response) => {
-          expect(typeof response.body).toBe('object');
-          expect(response.body.reviews.length).toBe(13);
-          expect(
-            response.body.reviews.forEach((review) => {
-              expect(review).toEqual(
-                expect.objectContaining({
-                  review_id: expect.any(Number),
-                  title: expect.any(String),
-                  category: expect.any(String),
-                  votes: expect.any(Number),
-                  owner: expect.any(String),
-                  review_img_url: expect.any(String),
-                  created_at: expect.any(String),
-                  designer: expect.any(String),
-                })
-              );
-            })
-          );
-        });
-    });
-  });
-  describe('/api/:review_Id/comments', () => {
+  describe('6. GET /api/reviews/:review_id/comments', () => {
     test('returns a list of comments for a specific given review', () => {
       return request(app)
         .get('/api/3/comments')
         .expect(200)
         .then((response) => {
-          expect(typeof response.body).toBe('object');
+          expect(Array.isArray(response.body.comments)).toBe(true);
           expect(response.body.comments.length).toBe(3);
           expect(
             response.body.comments.forEach((comment) => {
@@ -148,6 +165,22 @@ describe('app.js', () => {
               );
             })
           );
+        });
+    });
+    test('returns a 404 if given a correct value but out of the scope for review list', () => {
+      return request(app)
+        .get('/api/999/comments')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.message).toBe('Not found');
+        });
+    });
+    test('returns a 400 if given an invalid request', () => {
+      return request(app)
+        .get('/api/banana/comments')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.message).toBe('Invalid request made');
         });
     });
   });

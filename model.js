@@ -30,6 +30,7 @@ exports.returnReviews = () => {
 
 exports.returnReviewComments = (reviewId) => {
   const review = [+reviewId];
+  let err = '';
   if (typeof review[0] === 'number') {
     return db
       .query(
@@ -38,7 +39,7 @@ exports.returnReviewComments = (reviewId) => {
       )
       .then((comment) => {
         if (comment.rows[0] === undefined) {
-          let err = 'Not found';
+          err = 'Not found';
           return Promise.reject({ status: 404, msg: err });
         }
         return comment.rows;
