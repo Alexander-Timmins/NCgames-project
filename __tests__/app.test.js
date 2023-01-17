@@ -184,4 +184,49 @@ describe('app.js', () => {
         });
     });
   });
+  describe('7. POST /api/reviews/:review_id/comments', () => {
+    const newComment = {
+      username: 'bainesface',
+      body: 'This is a comment',
+    };
+    test('returns a posted comment', () => {
+      return request(app)
+        .post('/api/review/3/comments')
+        .send(newComment)
+        .expect(201)
+        .then((response) => {
+          expect(Array.isArray(response.body.comment)).toBe(false);
+          expect(typeof response.body.comment).toBe('object');
+          expect(response.body.comment).toEqual(
+            expect.objectContaining({
+              author: expect.any(String),
+              body: expect.any(String),
+              comment_id: expect.any(Number),
+              created_at: expect.any(String),
+              review_id: expect.any(Number),
+              votes: expect.any(Number),
+            })
+          );
+        });
+    });
+    test('returns a 404 if given a correct value but out of the scope for review list', () => {
+      return request(app)
+        .post('/api/review/9999/comments')
+        .send(newComment)
+        .expect(404)
+        .then((response) => {
+          console.log(response.body);
+          expect(response.body.message).toBe('Not found');
+        });
+    });
+    test('returns a 400 if given an invalid request', () => {
+      return request(app)
+        .post('/api/review/banana/comments')
+        .send(newComment)
+        .expect(400)
+        .then((response) => {
+          expect(response.body.message).toBe('Invalid request made');
+        });
+    });
+  });
 });
