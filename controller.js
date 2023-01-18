@@ -5,6 +5,7 @@ const {
   returnSpecificReview,
   returnUpdatedReview,
   insertReviewComment,
+  returnUsers
 } = require('./model');
 
 exports.standardResponse = (req, res) => {
@@ -64,3 +65,8 @@ exports.postReviewComment = (req, res, next) => {
     .catch(next);
 };
 
+exports.getUsers = (req, res, next) => {
+  returnUsers().then((users) => {
+    res.status(200).send(users)
+  }).catch(next);
+}
