@@ -307,7 +307,6 @@ describe('app.js', () => {
         .get('/api/users')
         .expect(200)
         .then((response) => {
-          console.log(response.body);
           expect(Array.isArray(response.body)).toBe(true);
           expect(typeof response.body[0]).toBe('object');
           expect(response.body.length).toBe(4);
@@ -318,7 +317,6 @@ describe('app.js', () => {
         .get('/api/users')
         .expect(200)
         .then((response) => {
-          console.log(response.body);
           expect(
             response.body.forEach((catagory) => {
               expect(catagory).toEqual(

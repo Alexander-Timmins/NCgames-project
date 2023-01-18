@@ -31,7 +31,6 @@ app.use((err, request, response, next) => {
 });
 
 app.use((err, request, response, next) => {
-  console.log(err);
   if (err.status) {
     response.status(err.status).send({ message: err.msg });
   }
