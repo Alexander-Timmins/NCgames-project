@@ -10,6 +10,7 @@ const {
   getReviewComments,
   updateReviewVotes,
   postReviewComment,
+  getUsers
 } = require('./controller');
 
 app.get('/api', standardResponse);
@@ -19,6 +20,7 @@ app.get('/api/:review_Id/comments', getReviewComments);
 app.get('/api/review/:review_Id', getSpecificReview);
 app.patch('/api/review/:review_Id', updateReviewVotes);
 app.post('/api/review/:review_Id/comments', postReviewComment);
+app.get('/api/users', getUsers);
 
 app.use((err, request, response, next) => {
   if (err.code === '22P02' || err.code === '23502') {

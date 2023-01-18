@@ -89,3 +89,9 @@ exports.insertReviewComment = (params, reviewId) => {
       }
     });
 };
+
+exports.returnUsers = () => {
+  return db.query(`SELECT * FROM users;`).then((users) => {
+    return users.rows;
+  });
+};
