@@ -92,7 +92,8 @@ describe('app.js', function () {
         review_body: "We couldn't find the werewolf!",
         review_img_url: 'https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?w=700&h=700',
         created_at: '2021-01-18T10:01:41.251Z',
-        votes: 5
+        votes: 5,
+        comment_count: 3
       };
       return request(app).get('/api/review/3').expect(200).then(function (response) {
         expect(response.body).toEqual(review3);
@@ -107,7 +108,8 @@ describe('app.js', function () {
           votes: expect.any(Number),
           category: expect.any(String),
           owner: expect.any(String),
-          created_at: expect.any(String)
+          created_at: expect.any(String),
+          comment_count: expect.any(Number)
         }));
       });
     });

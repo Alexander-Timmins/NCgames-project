@@ -12,7 +12,7 @@ exports.returnSpecificReview = function (review_Id) {
   var reviewId = [+review_Id];
 
   if (typeof reviewId[0] === 'number') {
-    return db.query("SELECT * FROM reviews WHERE review_Id = $1;", reviewId).then(function (review) {
+    return db.query("SELECT reviews.*, COUNT(comment_id)::INT AS comment_count\n      FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id WHERE reviews.review_id = $1 GROUP BY reviews.review_id;", reviewId).then(function (review) {
       if (review.rows[0] === undefined) {
         var _err = 'Not found';
         return Promise.reject({
