@@ -31,7 +31,6 @@ exports.returnReviews = () => {
     GROUP BY reviews.review_id;`
     )
     .then((reviews) => {
-      console.log(reviews);
       return reviews.rows;
     });
 };
@@ -94,4 +93,25 @@ exports.returnUsers = () => {
   return db.query(`SELECT * FROM users;`).then((users) => {
     return users.rows;
   });
+};
+
+exports.removeComment = (comment_id) => {
+  const commentId = [+comment_id];
+  if (typeof commentId[0] === 'number') {
+    return db
+      .query(
+        `DELETE FROM comments WHERE comment_id = $1 RETURNING *;`,
+        commentId
+      )
+      .then((comment) => {
+        console.log(comment.rows);
+        if (comment.rows.length === 1) {
+          return comment.rows;
+        } else {
+          return Promise.reject({ status: 404, msg: 'Not found' });
+        }
+      });
+  } else {
+    return Promise.reject({ status: 400, msg: err });
+  }
 };

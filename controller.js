@@ -6,6 +6,7 @@ const {
   returnUpdatedReview,
   insertReviewComment,
   returnUsers,
+  removeComment,
 } = require('./model');
 
 exports.standardResponse = (req, res) => {
@@ -69,6 +70,16 @@ exports.getUsers = (req, res, next) => {
   returnUsers()
     .then((users) => {
       res.status(200).send(users);
+    })
+    .catch(next);
+};
+
+exports.deleteComment = (req, res, next) => {
+  const commentId = req.params.comment_id;
+  console.log(commentId);
+  removeComment(commentId)
+    .then((comment) => {
+      res.status(204).send();
     })
     .catch(next);
 };

@@ -60,7 +60,6 @@ describe('app.js', () => {
         .get('/api/reviews')
         .expect(200)
         .then((response) => {
-          console.log(response.body);
           expect(typeof response.body).toBe('object');
           expect(response.body.hasOwnProperty('reviews')).toBe(true);
         });
@@ -329,6 +328,11 @@ describe('app.js', () => {
             })
           );
         });
+    });
+  });
+  describe('12. DELETE /api/comments/:comment_id', () => {
+    test('returns a code 204 and comment deleted', () => {
+      return request(app).delete('/api/comments/5').expect(204);
     });
   });
 });
