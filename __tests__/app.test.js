@@ -60,7 +60,6 @@ describe('app.js', () => {
         .get('/api/reviews')
         .expect(200)
         .then((response) => {
-          console.log(response.body);
           expect(typeof response.body).toBe('object');
           expect(response.body.hasOwnProperty('reviews')).toBe(true);
         });
@@ -328,6 +327,20 @@ describe('app.js', () => {
               );
             })
           );
+        });
+    });
+  });
+  describe('10. GET /api/reviews (queries)', () => {
+    test('returns an array of objects', () => {
+      return request(app)
+        .get('/api/reviews?category=dexterity')
+        .expect(200)
+        .then((response) => {
+          console.log(response.body);
+          expect(Array.isArray(response.body.reviews)).toBe(true);
+          expect(typeof response.body.reviews[0]).toBe('object');
+          expect(response.body.reviews.length).toBe(1);
+          expect(response.body.reviews[0].category).toBe('dexterity');
         });
     });
   });
