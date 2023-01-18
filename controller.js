@@ -3,6 +3,7 @@ const {
   returnReviews,
   returnReviewComments,
   returnSpecificReview,
+  returnUpdatedReview,
   insertReviewComment,
 } = require('./model');
 
@@ -44,6 +45,16 @@ exports.getReviewComments = (req, res, next) => {
     .catch(next);
 };
 
+exports.updateReviewVotes = (req, res, next) => {
+  const reviewId = req.params.review_Id;
+  const vote = req.body.inc_votes;
+  returnUpdatedReview(reviewId, vote)
+    .then((review) => {
+      res.status(202).send({ updatedReview: review });
+    })
+    .catch(next);
+};
+
 exports.postReviewComment = (req, res, next) => {
   const reviewId = req.params.review_Id;
   insertReviewComment(req.body, reviewId)
@@ -52,3 +63,4 @@ exports.postReviewComment = (req, res, next) => {
     })
     .catch(next);
 };
+

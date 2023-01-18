@@ -8,6 +8,7 @@ const {
   getSpecificReview,
   getReviews,
   getReviewComments,
+  updateReviewVotes,
   postReviewComment,
 } = require('./controller');
 
@@ -16,6 +17,7 @@ app.get('/api/categories', getCategories);
 app.get('/api/reviews', getReviews);
 app.get('/api/:review_Id/comments', getReviewComments);
 app.get('/api/review/:review_Id', getSpecificReview);
+app.patch('/api/review/:review_Id', updateReviewVotes);
 app.post('/api/review/:review_Id/comments', postReviewComment);
 
 app.use((err, request, response, next) => {
@@ -27,10 +29,9 @@ app.use((err, request, response, next) => {
 });
 
 app.use((err, request, response, next) => {
+  console.log(err);
   if (err.status) {
     response.status(err.status).send({ message: err.msg });
-  } else {
-    next(err);
   }
 });
 

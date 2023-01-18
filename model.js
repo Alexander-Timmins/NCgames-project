@@ -38,7 +38,6 @@ exports.returnReviews = () => {
 
 exports.returnReviewComments = (reviewId) => {
   const review = [+reviewId];
-  let err = '';
   if (typeof review[0] === 'number') {
     return db
       .query(
@@ -47,14 +46,29 @@ exports.returnReviewComments = (reviewId) => {
       )
       .then((comment) => {
         if (comment.rows[0] === undefined) {
-          err = 'Not found';
+          let err = 'Not found';
           return Promise.reject({ status: 404, msg: err });
         }
         return comment.rows;
       });
   } else {
-    return Promise.reject({ status: 400, msg: err });
+    return Promise.reject(err);
   }
+};
+
+exports.returnUpdatedReview = (reviewId, vote) => {
+  return db
+    .query(
+      `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *;`,
+      [vote, +reviewId]
+    )
+    .then((response) => {
+      if (response.rows[0] === undefined) {
+        let err = 'Not found';
+        return Promise.reject({ status: 404, msg: err });
+      }
+      return response.rows;
+    });
 };
 
 exports.insertReviewComment = (params, reviewId) => {
