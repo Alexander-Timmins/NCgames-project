@@ -301,4 +301,36 @@ describe('app.js', () => {
         .expect(400);
     });
   });
+  describe('9. GET /api/users', () => {
+    test('returns an array of objects', () => {
+      return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then((response) => {
+          console.log(response.body);
+          expect(Array.isArray(response.body)).toBe(true);
+          expect(typeof response.body[0]).toBe('object');
+          expect(response.body.length).toBe(4);
+        });
+    });
+    test('returns each object containing specified properties', () => {
+      return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then((response) => {
+          console.log(response.body);
+          expect(
+            response.body.forEach((catagory) => {
+              expect(catagory).toEqual(
+                expect.objectContaining({
+                  username: expect.any(String),
+                  name: expect.any(String),
+                  avatar_url: expect.any(String),
+                })
+              );
+            })
+          );
+        });
+    });
+  });
 });
