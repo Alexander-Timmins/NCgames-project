@@ -39,9 +39,9 @@ exports.returnReviews = function (category) {
   var errMsg = '';
 
   if (!sorts.includes(sort_by)) {
-    errMsg = 'invalid sorting query';
+    errMsg = 'Invalid sorting query';
   } else if (!orders.includes(order)) {
-    errMsg = 'invalid order';
+    errMsg = 'Invalid order';
   } else {
     var queryValues = [];
     var queryString = "SELECT reviews.*, COUNT(comment_id)::INT AS comment_count\n    FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id\n    ";
@@ -54,7 +54,7 @@ exports.returnReviews = function (category) {
     queryString += " GROUP BY reviews.review_id ORDER BY ".concat(sort_by, " ").concat(order, ";");
     return db.query(queryString, queryValues).then(function (response) {
       if (!response.rows.length) {
-        errMsg = 'no matching results found';
+        errMsg = 'No matching results found';
         return Promise.reject({
           status: 404,
           msg: errMsg

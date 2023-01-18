@@ -240,13 +240,28 @@ describe('app.js', function () {
     });
   });
   describe('10. GET /api/reviews (queries)', function () {
-    test('returns an array of objects', function () {
-      return request(app).get('/api/reviews?category=dexterity').expect(200).then(function (response) {
-        console.log(response.body);
+    test('returns an array of objects where each object category is equal to the query', function () {
+      return request(app).get('/api/reviews?category=social deduction').expect(200).then(function (response) {
         expect(Array.isArray(response.body.reviews)).toBe(true);
-        expect(_typeof(response.body.reviews[0])).toBe('object');
-        expect(response.body.reviews.length).toBe(1);
-        expect(response.body.reviews[0].category).toBe('dexterity');
+        expect(response.body.reviews.length).toBe(11);
+        expect(response.body.reviews.forEach(function (review) {
+          expect(_typeof(review)).toBe('object');
+          expect(review).toEqual(expect.objectContaining({
+            owner: expect.any(String),
+            designer: expect.any(String),
+            category: expect.toBeString('social deduction')
+          }));
+        }));
+      });
+    });
+    test('returns a 404 error when category is not found', function () {
+      return request(app).get('/api/reviews?category=rpg').expect(404).then(function (response) {
+        expect(response.body.message).toBe('No matching results found');
+      });
+    });
+    test('returns a 400 error when trying to sort by invalid column', function () {
+      return request(app).get('/api/reviews?sort_by=banana').expect(400).then(function (response) {
+        expect(response.body.message).toBe('Invalid sorting query');
       });
     });
   });

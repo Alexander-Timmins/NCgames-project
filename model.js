@@ -28,9 +28,9 @@ exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
   const orders = ['asc', 'desc'];
   let errMsg = '';
   if (!sorts.includes(sort_by)) {
-    errMsg = 'invalid sorting query';
+    errMsg = 'Invalid sorting query';
   } else if (!orders.includes(order)) {
-    errMsg = 'invalid order';
+    errMsg = 'Invalid order';
   } else {
     const queryValues = [];
     let queryString = `SELECT reviews.*, COUNT(comment_id)::INT AS comment_count
@@ -43,7 +43,7 @@ exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
     queryString += ` GROUP BY reviews.review_id ORDER BY ${sort_by} ${order};`;
     return db.query(queryString, queryValues).then((response) => {
       if (!response.rows.length) {
-        errMsg = 'no matching results found';
+        errMsg = 'No matching results found';
         return Promise.reject({ status: 404, msg: errMsg });
       }
       return response.rows;
