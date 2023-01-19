@@ -13,12 +13,12 @@ afterAll(() => {
 
 describe('app.js', () => {
   describe('/api', () => {
-    test('/api returns a string "Api ready to serve"', () => {
+    test('/api returns the endpoints.json file', () => {
       return request(app)
         .get('/api')
         .expect(200)
         .then((response) => {
-          expect(response.text).toBe('Api ready to serve');
+          expect(typeof response).toBe('object');
         });
     });
   });

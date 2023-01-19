@@ -9,8 +9,12 @@ const {
   removeComment,
 } = require('./model');
 
+const fs = require('fs');
+
 exports.standardResponse = (req, res) => {
-  res.status(200).send('Api ready to serve');
+  fs.readFile('endpoints.json', 'utf8', (err, data) => {
+    res.status(200).send(data);
+  });
 };
 
 exports.getCategories = (req, res, next) => {

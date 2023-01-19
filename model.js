@@ -40,6 +40,7 @@ exports.returnReviews = () => {
     });
 };
 
+
 exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
   const sorts = ['created_at', 'votes'];
   const orders = ['asc', 'desc'];
@@ -64,6 +65,7 @@ exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
         return Promise.reject({ status: 404, msg: errMsg });
       }
       return response.rows;
+
     });
   }
   return Promise.reject({ status: 400, msg: errMsg });
