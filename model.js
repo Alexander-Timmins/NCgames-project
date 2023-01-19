@@ -10,7 +10,11 @@ exports.returnSpecificReview = (review_Id) => {
   const reviewId = [+review_Id];
   if (typeof reviewId[0] === 'number') {
     return db
-      .query(`SELECT * FROM reviews WHERE review_Id = $1;`, reviewId)
+      .query(
+        `SELECT reviews.*, COUNT(comment_id)::INT AS comment_count
+      FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id WHERE reviews.review_id = $1 GROUP BY reviews.review_id;`,
+        reviewId
+      )
       .then((review) => {
         if (review.rows[0] === undefined) {
           let err = 'Not found';
@@ -33,7 +37,9 @@ exports.returnReviews = () => {
     )
     .then((reviews) => {
       return reviews.rows;
-})}
+    });
+};
+
 
 exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
   const sorts = ['created_at', 'votes'];
@@ -123,4 +129,24 @@ exports.returnUsers = () => {
   return db.query(`SELECT * FROM users;`).then((users) => {
     return users.rows;
   });
+};
+
+exports.removeComment = (comment_id) => {
+  const commentId = [+comment_id];
+  if (typeof commentId[0] === 'number') {
+    return db
+      .query(
+        `DELETE FROM comments WHERE comment_id = $1 RETURNING *;`,
+        commentId
+      )
+      .then((comment) => {
+        if (comment.rows.length === 1) {
+          return comment.rows;
+        } else {
+          return Promise.reject({ status: 404, msg: 'Not found' });
+        }
+      });
+  } else {
+    return Promise.reject({ status: 400, msg: err });
+  }
 };

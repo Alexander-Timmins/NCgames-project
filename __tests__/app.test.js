@@ -119,6 +119,7 @@ describe('app.js', () => {
           'https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?w=700&h=700',
         created_at: '2021-01-18T10:01:41.251Z',
         votes: 5,
+        comment_count: 3,
       };
       return request(app)
         .get('/api/review/3')
@@ -138,6 +139,7 @@ describe('app.js', () => {
               category: expect.any(String),
               owner: expect.any(String),
               created_at: expect.any(String),
+              comment_count: expect.any(Number),
             })
           );
         });
@@ -330,6 +332,13 @@ describe('app.js', () => {
         });
     });
   });
+
+  describe('12. DELETE /api/comments/:comment_id', () => {
+    test('returns a code 204 and comment deleted', () => {
+      return request(app).delete('/api/comments/5').expect(204);
+    });
+  });
+
   describe('10. GET /api/reviews (queries)', () => {
     test('returns an array of objects where each object category is equal to the query', () => {
       return request(app)
