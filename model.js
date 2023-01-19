@@ -31,7 +31,6 @@ exports.returnReviews = () => {
     GROUP BY reviews.review_id;`
     )
     .then((reviews) => {
-      console.log(reviews);
       return reviews.rows;
     });
 };
