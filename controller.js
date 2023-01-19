@@ -25,7 +25,7 @@ exports.getCategories = (req, res, next) => {
 };
 
 exports.getSpecificReview = (req, res, next) => {
-  let reviewId = [req.params.review_Id];
+  const reviewId = [req.params.review_Id];
   returnSpecificReview(reviewId)
     .then((review) => {
       res.status(200).send(review[0]);
@@ -34,7 +34,8 @@ exports.getSpecificReview = (req, res, next) => {
 };
 
 exports.getReviews = (req, res, next) => {
-  returnReviews()
+  const { category, sort_by, order } = req.query;
+  returnReviews(category, sort_by, order)
     .then((reviews) => {
       res.status(200).send({ reviews: reviews });
     })
