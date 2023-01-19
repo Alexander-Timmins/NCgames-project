@@ -134,7 +134,6 @@ exports.removeComment = (comment_id) => {
         commentId
       )
       .then((comment) => {
-        console.log(comment.rows);
         if (comment.rows.length === 1) {
           return comment.rows;
         } else {

@@ -77,7 +77,6 @@ exports.getUsers = (req, res, next) => {
 
 exports.deleteComment = (req, res, next) => {
   const commentId = req.params.comment_id;
-  console.log(commentId);
   removeComment(commentId)
     .then((comment) => {
       res.status(204).send();
