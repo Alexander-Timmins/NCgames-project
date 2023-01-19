@@ -328,11 +328,13 @@ describe('app.js', () => {
             })
           );
         });
-   
+    });
+  });
+
   describe('12. DELETE /api/comments/:comment_id', () => {
     test('returns a code 204 and comment deleted', () => {
       return request(app).delete('/api/comments/5').expect(204);
-      });
+    });
   });
 
   describe('10. GET /api/reviews (queries)', () => {
@@ -397,7 +399,6 @@ describe('app.js', () => {
         .then((response) => {
           expect(response.body.message).toBe('Invalid sorting query');
         });
-
     });
   });
 });

@@ -33,7 +33,8 @@ exports.returnReviews = () => {
     )
     .then((reviews) => {
       return reviews.rows;
-
+    });
+};
 
 exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
   const sorts = ['created_at', 'votes'];
