@@ -60,7 +60,6 @@ describe('app.js', () => {
         .get('/api/reviews')
         .expect(200)
         .then((response) => {
-          console.log(response.body);
           expect(typeof response.body).toBe('object');
           expect(response.body.hasOwnProperty('reviews')).toBe(true);
         });
@@ -328,6 +327,45 @@ describe('app.js', () => {
               );
             })
           );
+        });
+    });
+  });
+  describe('10. GET /api/reviews (queries)', () => {
+    test('returns an array of objects where each object category is equal to the query', () => {
+      return request(app)
+        .get('/api/reviews?category=social deduction')
+        .expect(200)
+        .then((response) => {
+          expect(Array.isArray(response.body.reviews)).toBe(true);
+          expect(response.body.reviews.length).toBe(11);
+          expect(
+            response.body.reviews.forEach((review) => {
+              expect(typeof review).toBe('object');
+              expect(review).toEqual(
+                expect.objectContaining({
+                  owner: expect.any(String),
+                  designer: expect.any(String),
+                  category: expect.toBeString('social deduction'),
+                })
+              );
+            })
+          );
+        });
+    });
+    test('returns a 404 error when category is not found', () => {
+      return request(app)
+        .get('/api/reviews?category=rpg')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.message).toBe('No matching results found');
+        });
+    });
+    test('returns a 400 error when trying to sort by invalid column', () => {
+      return request(app)
+        .get('/api/reviews?sort_by=banana')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.message).toBe('Invalid sorting query');
         });
     });
   });

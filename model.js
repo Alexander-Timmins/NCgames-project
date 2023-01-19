@@ -22,18 +22,34 @@ exports.returnSpecificReview = (review_Id) => {
     return Promise.reject({ status: 400, msg: err });
   }
 };
-exports.returnReviews = () => {
-  return db
-    .query(
-      `SELECT reviews.*, COUNT(comment_id)::INT AS comment_count
-    FROM reviews
-    LEFT JOIN comments ON comments.review_id = reviews.review_id
-    GROUP BY reviews.review_id;`
-    )
-    .then((reviews) => {
-      console.log(reviews);
-      return reviews.rows;
+
+exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
+  const sorts = ['created_at', 'votes'];
+  const orders = ['asc', 'desc'];
+  let errMsg = '';
+  if (!sorts.includes(sort_by)) {
+    errMsg = 'Invalid sorting query';
+  } else if (!orders.includes(order)) {
+    errMsg = 'Invalid order';
+  } else {
+    const queryValues = [];
+    let queryString = `SELECT reviews.*, COUNT(comment_id)::INT AS comment_count
+    FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id
+    `;
+    if (category) {
+      queryValues.push(category);
+      queryString += ` WHERE reviews.category = $1`;
+    }
+    queryString += ` GROUP BY reviews.review_id ORDER BY ${sort_by} ${order};`;
+    return db.query(queryString, queryValues).then((response) => {
+      if (!response.rows.length) {
+        errMsg = 'No matching results found';
+        return Promise.reject({ status: 404, msg: errMsg });
+      }
+      return response.rows;
     });
+  }
+  return Promise.reject({ status: 400, msg: errMsg });
 };
 
 exports.returnReviewComments = (reviewId) => {
