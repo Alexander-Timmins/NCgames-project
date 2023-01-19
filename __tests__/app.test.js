@@ -333,12 +333,6 @@ describe('app.js', () => {
     });
   });
 
-  describe('12. DELETE /api/comments/:comment_id', () => {
-    test('returns a code 204 and comment deleted', () => {
-      return request(app).delete('/api/comments/5').expect(204);
-    });
-  });
-
   describe('10. GET /api/reviews (queries)', () => {
     test('returns an array of objects where each object category is equal to the query', () => {
       return request(app)
@@ -400,6 +394,17 @@ describe('app.js', () => {
         .then((response) => {
           expect(response.body.message).toBe('Invalid sorting query');
         });
+    });
+  });
+  describe('12. DELETE /api/comments/:comment_id', () => {
+    test('returns a code 204 and comment deleted', () => {
+      return request(app).delete('/api/comments/5').expect(204);
+    });
+    test('returns a code 404 if comment ID not found', () => {
+      return request(app).delete('/api/comments/999').expect(404);
+    });
+    test('returns a code 400 if invalid request made', () => {
+      return request(app).delete('/api/comments/banana').expect(400);
     });
   });
 });
