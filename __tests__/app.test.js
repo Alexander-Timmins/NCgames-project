@@ -332,6 +332,13 @@ describe('app.js', () => {
         });
     });
   });
+
+  describe('12. DELETE /api/comments/:comment_id', () => {
+    test('returns a code 204 and comment deleted', () => {
+      return request(app).delete('/api/comments/5').expect(204);
+    });
+  });
+
   describe('10. GET /api/reviews (queries)', () => {
     test('returns an array of objects where each object category is equal to the query', () => {
       return request(app)
