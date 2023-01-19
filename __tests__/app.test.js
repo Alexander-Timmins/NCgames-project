@@ -357,7 +357,6 @@ describe('app.js', () => {
         .get('/api/reviews?category=social deduction&sort_by=votes&order=asc')
         .expect(200)
         .then((response) => {
-          console.log(response.body);
           expect(Array.isArray(response.body.reviews)).toBe(true);
           expect(response.body.reviews.length).toBe(11);
           expect(response.body.reviews).toBeSortedBy('votes', {
