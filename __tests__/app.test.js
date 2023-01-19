@@ -352,6 +352,31 @@ describe('app.js', () => {
           );
         });
     });
+    test('returns an array of objects where each object category is social deduction and they are in ascending order by the number of votes', () => {
+      return request(app)
+        .get('/api/reviews?category=social deduction&sort_by=votes&order=asc')
+        .expect(200)
+        .then((response) => {
+          console.log(response.body);
+          expect(Array.isArray(response.body.reviews)).toBe(true);
+          expect(response.body.reviews.length).toBe(11);
+          expect(response.body.reviews).toBeSortedBy('votes', {
+            ascending: true,
+          });
+          expect(
+            response.body.reviews.forEach((review) => {
+              expect(typeof review).toBe('object');
+              expect(review).toEqual(
+                expect.objectContaining({
+                  owner: expect.any(String),
+                  designer: expect.any(String),
+                  category: expect.toBeString('social deduction'),
+                })
+              );
+            })
+          );
+        });
+    });
     test('returns a 404 error when category is not found', () => {
       return request(app)
         .get('/api/reviews?category=rpg')
