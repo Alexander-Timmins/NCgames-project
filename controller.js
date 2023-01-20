@@ -7,16 +7,9 @@ const {
   insertReviewComment,
   returnUsers,
   removeComment,
-  returnUser
+  returnUser,
+  returnUpdatedComment,
 } = require('./model');
-
-const fs = require('fs');
-
-exports.standardResponse = (req, res) => {
-  fs.readFile('endpoints.json', 'utf8', (err, data) => {
-    res.status(200).send(data);
-  });
-};
 
 exports.getCategories = (req, res, next) => {
   returnCategories()
@@ -63,6 +56,16 @@ exports.updateReviewVotes = (req, res, next) => {
     .catch(next);
 };
 
+exports.updateCommentVotes = (req, res, next) => {
+  const commentId = req.params.comment_Id;
+  const vote = req.body.inc_votes;
+  returnUpdatedComment(commentId, vote)
+    .then((comment) => {
+      res.status(202).send({ updatedComment: comment });
+    })
+    .catch(next);
+};
+
 exports.postReviewComment = (req, res, next) => {
   const reviewId = req.params.review_Id;
   insertReviewComment(req.body, reviewId)
@@ -81,7 +84,7 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.getUser = (req, res, next) => {
-  const username = req.params.username
+  const username = req.params.username;
   returnUser(username)
     .then((user) => {
       res.status(200).send(user);
@@ -90,7 +93,7 @@ exports.getUser = (req, res, next) => {
 };
 
 exports.deleteComment = (req, res, next) => {
-  const commentId = req.params.comment_id;
+  const commentId = req.params.comment_Id;
   removeComment(commentId)
     .then((comment) => {
       res.status(204).send();

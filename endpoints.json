@@ -47,7 +47,7 @@
       "votes": "5"
     }
   },
-  "GET /api/reviews/:review_id/comments": {
+  "GET /api/:review_id/comments": {
     "description": "serves an object of comments for a review by review_id",
     "queries": [],
     "exampleResponse": {

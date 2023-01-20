@@ -416,7 +416,60 @@ describe('app.js', () => {
           expect(Array.isArray(response.body)).toBe(true);
           expect(typeof response.body[0]).toBe('object');
           expect(response.body.length).toBe(1);
+          expect(response.body[0].username).toBe('mallionaire');
         });
+    });
+  });
+  describe('18. PATCH /api/comments/:comment_Id', () => {
+    test('returns the updated comment', () => {
+      const votesToUpdate = {
+        inc_votes: 1000,
+      };
+      return request(app)
+        .patch('/api/comments/3')
+        .send(votesToUpdate)
+        .expect(202)
+        .then((response) => {
+          expect(response.body).toEqual({
+            updatedComment: [
+              {
+                body: "I didn't know dogs could play games",
+                votes: 1010,
+                author: 'philippaclaire9',
+                comment_id: 3,
+                review_id: 3,
+                created_at: '2021-01-18T10:09:48.110Z',
+              },
+            ],
+          });
+        });
+    });
+    test('returns a status 400 when passed an invalid query', () => {
+      const votesToUpdate = {
+        inc_votes: 1000,
+      };
+      return request(app)
+        .patch('/api/comments/banana')
+        .send(votesToUpdate)
+        .expect(400);
+    });
+    test('returns a status 404 when passed a review ID that does not exist', () => {
+      const votesToUpdate = {
+        inc_votes: 1000,
+      };
+      return request(app)
+        .patch('/api/comments/999')
+        .send(votesToUpdate)
+        .expect(404);
+    });
+    test('returns a status 400 when passed an invalid body', () => {
+      const votesToUpdate = {
+        random: 1000,
+      };
+      return request(app)
+        .patch('/api/comments/3')
+        .send(votesToUpdate)
+        .expect(400);
     });
   });
 });
