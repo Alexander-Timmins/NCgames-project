@@ -57,7 +57,7 @@ describe('app.js', () => {
   describe('4. GET /api/reviews', () => {
     test('returns object with key of reviews', () => {
       return request(app)
-        .get('/api/reviews')
+        .get('/api/review')
         .expect(200)
         .then((response) => {
           expect(typeof response.body).toBe('object');
@@ -66,7 +66,7 @@ describe('app.js', () => {
     });
     test('returns a list of reviews in an object key with array values', () => {
       return request(app)
-        .get('/api/reviews')
+        .get('/api/review')
         .expect(200)
         .then((response) => {
           expect(
@@ -305,7 +305,7 @@ describe('app.js', () => {
   describe('9. GET /api/users', () => {
     test('returns an array of objects', () => {
       return request(app)
-        .get('/api/users')
+        .get('/api/user')
         .expect(200)
         .then((response) => {
           expect(Array.isArray(response.body)).toBe(true);
@@ -315,7 +315,7 @@ describe('app.js', () => {
     });
     test('returns each object containing specified properties', () => {
       return request(app)
-        .get('/api/users')
+        .get('/api/user')
         .expect(200)
         .then((response) => {
           expect(
@@ -336,7 +336,7 @@ describe('app.js', () => {
   describe('10. GET /api/reviews (queries)', () => {
     test('returns an array of objects where each object category is equal to the query', () => {
       return request(app)
-        .get('/api/reviews?category=social deduction')
+        .get('/api/review?category=social deduction')
         .expect(200)
         .then((response) => {
           expect(Array.isArray(response.body.reviews)).toBe(true);
@@ -357,7 +357,7 @@ describe('app.js', () => {
     });
     test('returns an array of objects where each object category is social deduction and they are in ascending order by the number of votes', () => {
       return request(app)
-        .get('/api/reviews?category=social deduction&sort_by=votes&order=asc')
+        .get('/api/review?category=social deduction&sort_by=votes&order=asc')
         .expect(200)
         .then((response) => {
           expect(Array.isArray(response.body.reviews)).toBe(true);
@@ -381,7 +381,7 @@ describe('app.js', () => {
     });
     test('returns a 404 error when category is not found', () => {
       return request(app)
-        .get('/api/reviews?category=rpg')
+        .get('/api/review?category=rpg')
         .expect(404)
         .then((response) => {
           expect(response.body.message).toBe('No matching results found');
@@ -389,7 +389,7 @@ describe('app.js', () => {
     });
     test('returns a 400 error when trying to sort by invalid column', () => {
       return request(app)
-        .get('/api/reviews?sort_by=banana')
+        .get('/api/review?sort_by=banana')
         .expect(400)
         .then((response) => {
           expect(response.body.message).toBe('Invalid sorting query');
@@ -405,6 +405,19 @@ describe('app.js', () => {
     });
     test('returns a code 400 if invalid request made', () => {
       return request(app).delete('/api/comments/banana').expect(400);
+    });
+  });
+  describe('17. GET /api/users/:username', () => {
+    test('returns an array of objects', () => {
+      return request(app)
+        .get('/api/user/mallionaire')
+        .expect(200)
+        .then((response) => {
+          console.log(response.body);
+          expect(Array.isArray(response.body)).toBe(true);
+          expect(typeof response.body[0]).toBe('object');
+          expect(response.body.length).toBe(1);
+        });
     });
   });
 });

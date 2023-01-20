@@ -13,17 +13,19 @@ const {
   postReviewComment,
   getUsers,
   deleteComment,
+  getUser,
 } = require('./controller');
 
 app.use('/api', apiRouter);
-apiRouter.get('/', standardResponse);
+apiRouter.get('', standardResponse);
 apiRouter.get('/categories', getCategories);
-apiRouter.get('/reviews', getReviews);
+apiRouter.get('/review', getReviews);
 apiRouter.get('/:review_Id/comments', getReviewComments);
 apiRouter.get('/review/:review_Id', getSpecificReview);
 apiRouter.patch('/review/:review_Id', updateReviewVotes);
 apiRouter.post('/review/:review_Id/comments', postReviewComment);
-apiRouter.get('/users', getUsers);
+apiRouter.get('/user', getUsers);
+apiRouter.get('/user/:username', getUser);
 apiRouter.delete('/comments/:comment_id', deleteComment);
 
 app.use((err, request, response, next) => {

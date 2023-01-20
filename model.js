@@ -40,7 +40,6 @@ exports.returnReviews = () => {
     });
 };
 
-
 exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
   const sorts = ['created_at', 'votes'];
   const orders = ['asc', 'desc'];
@@ -65,7 +64,6 @@ exports.returnReviews = (category, sort_by = 'created_at', order = 'desc') => {
         return Promise.reject({ status: 404, msg: errMsg });
       }
       return response.rows;
-
     });
   }
   return Promise.reject({ status: 400, msg: errMsg });
@@ -126,7 +124,7 @@ exports.insertReviewComment = (params, reviewId) => {
 };
 
 exports.returnUsers = () => {
-  return db.query(`SELECT * FROM users;`).then((users) => {
+  return db.query(`SELECT * FROM users`).then((users) => {
     return users.rows;
   });
 };
@@ -149,4 +147,15 @@ exports.removeComment = (comment_id) => {
   } else {
     return Promise.reject({ status: 400, msg: err });
   }
+};
+
+exports.returnUser = (username) => {
+  const usernameQuery = [username];
+  return db
+    .query(`SELECT * FROM users WHERE username = ($1);`, usernameQuery)
+    .then((user) => {
+      if (user.rows[0] === undefined) {
+        Promise.reject({ status: 404, msg: 'User not found' });
+      } else return user.rows;
+    });
 };

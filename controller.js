@@ -7,6 +7,7 @@ const {
   insertReviewComment,
   returnUsers,
   removeComment,
+  returnUser
 } = require('./model');
 
 const fs = require('fs');
@@ -75,6 +76,15 @@ exports.getUsers = (req, res, next) => {
   returnUsers()
     .then((users) => {
       res.status(200).send(users);
+    })
+    .catch(next);
+};
+
+exports.getUser = (req, res, next) => {
+  const username = req.params.username
+  returnUser(username)
+    .then((user) => {
+      res.status(200).send(user);
     })
     .catch(next);
 };
