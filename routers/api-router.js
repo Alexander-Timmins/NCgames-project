@@ -1,8 +1,9 @@
 const apiRouter = require('express').Router();
-const standardResponse = require('../controller');
 
 apiRouter.get('/', (req, res) => {
-  res.status(200).send(standardResponse());
+  fs.readFile('endpoints.json', 'utf8', (err, data) => {
+    res.status(200).send(data);
+  });
 });
 
 module.exports = apiRouter;

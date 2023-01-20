@@ -17,7 +17,6 @@ const {
 } = require('./controller');
 
 app.use('/api', apiRouter);
-apiRouter.get('/api', standardResponse);
 apiRouter.get('/categories', getCategories);
 apiRouter.get('/review', getReviews);
 apiRouter.get('/:review_Id/comments', getReviewComments);
