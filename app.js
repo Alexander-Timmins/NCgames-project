@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
+const apiRouter = require('./routers/api-router');
 
 const {
   getCategories,
@@ -11,18 +12,19 @@ const {
   updateReviewVotes,
   postReviewComment,
   getUsers,
-  deleteComment
+  deleteComment,
 } = require('./controller');
 
-app.get('/api', standardResponse);
-app.get('/api/categories', getCategories);
-app.get('/api/reviews', getReviews);
-app.get('/api/:review_Id/comments', getReviewComments);
-app.get('/api/review/:review_Id', getSpecificReview);
-app.patch('/api/review/:review_Id', updateReviewVotes);
-app.post('/api/review/:review_Id/comments', postReviewComment);
-app.get('/api/users', getUsers);
-app.delete('/api/comments/:comment_id', deleteComment);
+app.use('/api', apiRouter);
+apiRouter.get('/', standardResponse);
+apiRouter.get('/categories', getCategories);
+apiRouter.get('/reviews', getReviews);
+apiRouter.get('/:review_Id/comments', getReviewComments);
+apiRouter.get('/review/:review_Id', getSpecificReview);
+apiRouter.patch('/review/:review_Id', updateReviewVotes);
+apiRouter.post('/review/:review_Id/comments', postReviewComment);
+apiRouter.get('/users', getUsers);
+apiRouter.delete('/comments/:comment_id', deleteComment);
 
 app.use((err, request, response, next) => {
   if (err.code === '22P02' || err.code === '23502') {
