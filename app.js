@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 const apiRouter = require('./routers/api-router');
+const cors = require('cors')
 
 const {
   getCategories,
@@ -16,6 +17,7 @@ const {
   updateCommentVotes
 } = require('./controller');
 
+app.use(cors())
 app.use('/api', apiRouter);
 apiRouter.get('/categories', getCategories);
 apiRouter.get('/review', getReviews);
